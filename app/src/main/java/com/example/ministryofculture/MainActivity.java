@@ -10,6 +10,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -55,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         search.clearFocus();
         recyclerView = findViewById(R.id.recycleview);
         recyclerView.setHasFixedSize(true);
-        recyclerView.setItemViewCacheSize(20);
+        recyclerView.setItemViewCacheSize(20);//Itemview 暫存數量
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         remains = new ArrayList<>();
@@ -71,7 +72,6 @@ public class MainActivity extends AppCompatActivity {
 
         apIservice = retrofit.create(APIservice.class);
 
-        setRadioButton();
         getJson();
 
         radiobox.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -79,9 +79,18 @@ public class MainActivity extends AppCompatActivity {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
 
                 RadioButton radioButton = findViewById(group.getCheckedRadioButtonId());
-                Log.d("Q200", ""+radioButton.getText().toString());
+                //Log.d("Q200", ""+radioButton.getText().toString());
                 String location = radioButton.getText().toString();
-                searchLocation(location);
+
+                if (location.equals("全部")){
+                    locationRemains.clear();
+                    nameRemains.clear();
+                    search.setText("");
+                    remainAdapter.setRemains(remains);
+                    remainAdapter.notifyDataSetChanged();
+                }else {
+                    searchLocation(location);
+                }
             }
         });
 
@@ -166,41 +175,29 @@ public class MainActivity extends AppCompatActivity {
                     remains.add(new Remain(imageUri,casename,stylename, city+address, intro));
                 }
                 remainAdapter.notifyDataSetChanged();
-            }
 
-            @Override
-            public void onFailure(Call<List<GetApi>> call, Throwable t) {
-                Log.v("V100=",""+t.getMessage());
-            }
-        });
-    }
-
-    private void setRadioButton(){
-
-        call = apIservice.getPost();
-        call.enqueue(new Callback<List<GetApi>>() {
-            @Override
-            public void onResponse(Call<List<GetApi>> call, Response<List<GetApi>> response) {
-                if (!response.isSuccessful()){
-                    Log.v("V30=","Code = "+ response.code());
-                    return;
-                }
-                List<String> strings = new ArrayList<>();
-                List<GetApi> getApis = response.body();
-
-                assert getApis != null;
+                //用Set特性排除相同內容 (取得區域名)
+                Set<String> locaName = new HashSet<>();
                 for (GetApi getApi : getApis){
-                    strings.add(getApi.getCityName().substring(0,2));
+                    locaName.add(getApi.getCityName().substring(0,2));
                 }
 
-                Set<String> stringSet = new HashSet<>();
-                for (String s : strings){
-                    stringSet.add(s);
-                }
-//                for (int i = 0; i<stringSet.size(); i++) {
-//                    Log.d("Q200", "" + stringSet);
-//                }
-                for(String s : stringSet){
+                //第一個RadioButton
+                RadioButton button = new RadioButton(MainActivity.this);
+                RadioGroup.LayoutParams params = new RadioGroup.LayoutParams(RadioGroup.LayoutParams.WRAP_CONTENT,
+                        RadioGroup.LayoutParams.WRAP_CONTENT);
+                params.setMargins(40,10,0,8);
+                button.setLayoutParams(params);
+                button.setText("全部");
+                button.setTextSize(18);
+                button.setButtonDrawable(android.R.color.transparent);
+                button.setPadding(20,5,20,5);
+                button.setGravity(Gravity.CENTER);
+                button.setBackground(getResources().getDrawable(R.drawable.radio_selector));
+                radiobox.addView(button);
+
+                //依取得的區域名 新增RadioButton
+                for(String s : locaName){
                     RadioButton radioButton = new RadioButton(MainActivity.this);
                     RadioGroup.LayoutParams layoutParams = new RadioGroup.LayoutParams(RadioGroup.LayoutParams.WRAP_CONTENT,
                             RadioGroup.LayoutParams.WRAP_CONTENT);
@@ -218,8 +215,9 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<GetApi>> call, Throwable t) {
-            Log.v("V100=",""+t.getMessage());
+                Log.v("V100=",""+t.getMessage());
             }
         });
     }
+
 }

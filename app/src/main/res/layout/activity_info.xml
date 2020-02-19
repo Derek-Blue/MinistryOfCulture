@@ -18,17 +18,16 @@
         android:layout_height="wrap_content"
         android:scaleType="fitCenter"
         android:layout_below="@+id/address"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="15dp"
         android:id="@+id/info_image2" />
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
         android:id="@+id/close"
-        android:src="@drawable/ic_left"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
-        android:tint="#fff"/>
+        android:src="@drawable/off"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -40,7 +39,12 @@
         android:layout_marginLeft="20dp"
         android:layout_marginTop="5dp"
         android:textStyle="bold"
-        android:textColor="#fff"/>
+        android:textColor="#fff"
+        android:background="@drawable/intro_name"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="3dp"
+        android:paddingBottom="3dp"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -53,7 +57,24 @@
         android:layout_marginRight="20dp"
         android:layout_marginTop="5dp"
         android:textStyle="bold"
-        android:textColor="#fff"/>
+        android:textColor="#fff"
+        android:background="@drawable/intro_name"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="3dp"
+        android:paddingBottom="3dp"
+        android:maxLines="1"/>
+
+    <LinearLayout
+        android:id="@+id/introView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="15dp"
+        android:background="@drawable/intro_bg"
+        android:orientation="vertical">
 
     <TextView
         android:layout_width="wrap_content"
@@ -62,9 +83,9 @@
         android:textSize="18dp"
         android:textStyle="bold"
         android:layout_above="@+id/info"
-        android:layout_marginLeft="20dp"
-        android:layout_marginBottom="5dp"
-        android:textColor="#fff"/>
+        android:textColor="#fff"
+        android:paddingTop="8dp"
+        android:paddingLeft="8dp"/>
 
 
     <TextView
@@ -76,10 +97,9 @@
         android:singleLine="false"
         android:scrollbars="vertical"
         android:maxLines="10"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="30dp"
-        android:textColor="#fff"/>
+        android:textColor="#fff"
+        android:padding="8dp"/>
+
+    </LinearLayout>
 
 </RelativeLayout>

@@ -1,32 +1,28 @@
 package com.example.ministryofculture.Adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.example.ministryofculture.InfoActivity;
 import com.example.ministryofculture.Model.Remain;
 import com.example.ministryofculture.R;
 
 import java.util.List;
+
+import pl.droidsonroids.gif.GifImageView;
 
 public class RemainAdapter extends RecyclerView.Adapter<RemainAdapter.ViewHolder> {
 
@@ -56,19 +52,7 @@ public class RemainAdapter extends RecyclerView.Adapter<RemainAdapter.ViewHolder
 
         Glide.with(context.getApplicationContext())
                 .load(remain.getImageUri())
-                .listener(new RequestListener<Drawable>() {
-                    @Override
-                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                        return false;
-                    }
-
-                    @Override
-                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                        holder.progressBar.setVisibility(View.GONE);
-                        return false;
-                    }
-                })
-                .centerCrop()
+                .transition(DrawableTransitionOptions.withCrossFade(500))//淡出效果 (使用後自動崁套顯示背景progress) 好用!!
                 .into(holder.item_image);
 
         holder.casename.setText(remain.getCasename());
@@ -92,6 +76,7 @@ public class RemainAdapter extends RecyclerView.Adapter<RemainAdapter.ViewHolder
                 bundle.putString("intro", remain.getIntro());
                 intent.putExtras(bundle);
                 context.startActivity(intent);
+                ((Activity)context).overridePendingTransition(R.anim.fade_in_top,R.anim.no_anim);
             }
         });
     }
@@ -110,7 +95,7 @@ public class RemainAdapter extends RecyclerView.Adapter<RemainAdapter.ViewHolder
 
         public TextView casename, stylename, address;
         public ImageView item_image;
-        public ProgressBar progressBar;
+        public GifImageView progressBar;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -119,7 +104,7 @@ public class RemainAdapter extends RecyclerView.Adapter<RemainAdapter.ViewHolder
             stylename = itemView.findViewById(R.id.stylename);
             address = itemView.findViewById(R.id.address);
             item_image = itemView.findViewById(R.id.item_image);
-            progressBar = itemView.findViewById(R.id.progress_circular);
+            progressBar = itemView.findViewById(R.id.progress);
         }
     }
 }

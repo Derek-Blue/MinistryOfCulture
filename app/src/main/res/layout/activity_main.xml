@@ -46,7 +46,8 @@
             android:id="@+id/radiobox"
             android:orientation="horizontal"
             android:paddingTop="10dp"
-            android:paddingBottom="13dp">
+            android:paddingBottom="13dp"
+            android:paddingRight="40dp">
 
         </RadioGroup>
 

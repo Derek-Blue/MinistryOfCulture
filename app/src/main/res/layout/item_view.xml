@@ -11,11 +11,12 @@
         android:background="@drawable/bg_relative"
         android:id="@+id/relative">
 
-        <ProgressBar
+        <pl.droidsonroids.gif.GifImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:id="@+id/progress_circular"/>
+            android:id="@+id/progress"
+            android:src="@mipmap/progress2"/>
 
         <ImageView
             android:layout_width="130dp"
