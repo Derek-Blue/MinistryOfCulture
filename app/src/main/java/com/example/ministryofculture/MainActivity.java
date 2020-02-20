@@ -11,11 +11,14 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import com.example.ministryofculture.Adapter.RemainAdapter;
+import com.example.ministryofculture.CostumView.PrDialog;
 import com.example.ministryofculture.Model.Api_post;
 import com.example.ministryofculture.Model.GetApi;
 import com.example.ministryofculture.Model.Remain;
@@ -151,12 +154,15 @@ public class MainActivity extends AppCompatActivity {
 
     private void getJson() {
 
+        final PrDialog prDialog = new PrDialog(MainActivity.this,R.style.PrDialog,0,0);
+        prDialog.show();
         call = apIservice.getPost();
         call.enqueue(new Callback<List<GetApi>>() {
             @Override
             public void onResponse(Call<List<GetApi>> call, Response<List<GetApi>> response) {
                 if (!response.isSuccessful()){
                     Log.v("V30=","Code = "+ response.code());
+                    prDialog.dismiss();
                     return;
                 }
 
@@ -211,6 +217,7 @@ public class MainActivity extends AppCompatActivity {
                     radioButton.setBackground(getResources().getDrawable(R.drawable.radio_selector));
                     radiobox.addView(radioButton);
                 }
+                prDialog.dismiss();
             }
 
             @Override
