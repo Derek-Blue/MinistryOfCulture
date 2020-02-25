@@ -30,6 +30,8 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
     implementation 'jp.wasabeef:glide-transformations:4.0.1'
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.1.17'
+    //SwipeRefreshLayout
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
     testImplementation 'junit:junit:4.12'
 

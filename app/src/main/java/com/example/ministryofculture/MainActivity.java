@@ -3,6 +3,7 @@ package com.example.ministryofculture;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.app.DownloadManager;
 import android.os.Bundle;
@@ -44,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
     private RadioGroup radiobox;
     private EditText search;
     private RecyclerView recyclerView;
+    SwipeRefreshLayout swipe;
 
     private List<Remain> remains, locationRemains, nameRemains;
     private RemainAdapter remainAdapter;
@@ -75,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
 
         apIservice = retrofit.create(APIservice.class);
 
-        getJson();
+        getJsonAndButton();
 
         radiobox.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -112,6 +114,16 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
 
+            }
+        });
+
+        swipe = findViewById(R.id.swipe);
+        swipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                search.setText("");
+                refreshJson();
+                swipe.setRefreshing(false);
             }
         });
 
@@ -152,7 +164,48 @@ public class MainActivity extends AppCompatActivity {
         remainAdapter.notifyDataSetChanged();
     }
 
-    private void getJson() {
+    private void refreshJson() {
+
+        recyclerView.setAdapter(null);
+        final PrDialog prDialog = new PrDialog(MainActivity.this,R.style.PrDialog,0,0);
+        prDialog.show();
+        call = apIservice.getPost();
+        call.enqueue(new Callback<List<GetApi>>() {
+            @Override
+            public void onResponse(Call<List<GetApi>> call, Response<List<GetApi>> response) {
+                if (!response.isSuccessful()){
+                    Log.v("V30=","Code = "+ response.code());
+                    prDialog.dismiss();
+                    return;
+                }
+
+                List<GetApi> getApis = response.body();
+
+                remains.clear();
+                assert getApis != null;
+                for (GetApi getApi : getApis){
+                    String imageUri = getApi.getRepresentImage();
+                    String casename = getApi.getName();
+                    String stylename = getApi.getBuildingYearName();
+                    String city = getApi.getCityName();
+                    String address = getApi.getAddress();
+                    String intro = getApi.getIntro();
+
+                    remains.add(new Remain(imageUri,casename,stylename, city+address, intro));
+                }
+                remainAdapter.notifyDataSetChanged();
+                recyclerView.setAdapter(remainAdapter);
+                prDialog.dismiss();
+            }
+
+            @Override
+            public void onFailure(Call<List<GetApi>> call, Throwable t) {
+                Log.v("V100=",""+t.getMessage());
+            }
+        });
+    }
+
+    private void getJsonAndButton() {
 
         final PrDialog prDialog = new PrDialog(MainActivity.this,R.style.PrDialog,0,0);
         prDialog.show();

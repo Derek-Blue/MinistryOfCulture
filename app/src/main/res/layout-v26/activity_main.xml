@@ -17,7 +17,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/toolbar"
-            android:background="?android:attr/windowBackground">
+            android:background="?android:attr/windowBackground"
+            android:focusable="true"
+            android:focusableInTouchMode="true">
 
             <com.example.ministryofculture.CostumView.myEditTextView
                 android:layout_width="match_parent"
@@ -27,7 +29,6 @@
                 android:hint="搜尋..."
                 android:padding="5dp"
                 android:layout_marginRight="20dp"
-                android:focusedByDefault="false"
                 android:maxLines="1"/>
 
         </androidx.appcompat.widget.Toolbar>
@@ -53,9 +54,16 @@
 
     </HorizontalScrollView>
 
-    <androidx.recyclerview.widget.RecyclerView
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipe"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/recycleview" />
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/recycleview" />
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </LinearLayout>
