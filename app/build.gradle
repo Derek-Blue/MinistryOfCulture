@@ -5,7 +5,7 @@ android {
     buildToolsVersion "29.0.2"
     defaultConfig {
         applicationId "com.example.ministryofculture"
-        minSdkVersion 21
+        minSdkVersion 23
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -32,6 +32,8 @@ dependencies {
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.1.17'
     //SwipeRefreshLayout
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    //漢字轉拼音
+    implementation 'com.github.promeg:tinypinyin:2.0.3'
 
     testImplementation 'junit:junit:4.12'
 

@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.app.DownloadManager;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -23,8 +24,11 @@ import com.example.ministryofculture.CostumView.PrDialog;
 import com.example.ministryofculture.Model.Api_post;
 import com.example.ministryofculture.Model.GetApi;
 import com.example.ministryofculture.Model.Remain;
+import com.github.promeg.pinyinhelper.Pinyin;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
@@ -54,6 +58,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        getWindow().setStatusBarColor(Color.WHITE);
 
         radiobox = findViewById(R.id.radiobox);
 
@@ -91,6 +97,7 @@ public class MainActivity extends AppCompatActivity {
                     locationRemains.clear();
                     nameRemains.clear();
                     search.setText("");
+                    Collections.sort(remains,sortData);
                     remainAdapter.setRemains(remains);
                     remainAdapter.notifyDataSetChanged();
                 }else {
@@ -126,8 +133,19 @@ public class MainActivity extends AppCompatActivity {
                 swipe.setRefreshing(false);
             }
         });
-
     }
+
+    //依字首排序
+    public static Comparator<Remain> sortData = new Comparator<Remain>() {
+        @Override
+        public int compare(Remain o1, Remain o2) {
+            char c1 = o1.getCasename().charAt(0);
+            char c2 = o2.getCasename().charAt(0);
+            String s1 = Pinyin.toPinyin(c1);//漢字轉英文拼音
+            String s2 = Pinyin.toPinyin(c2);
+            return s1.compareTo(s2);
+        }
+    };
 
     private void searchLocation(final String location) {
 
@@ -233,6 +251,7 @@ public class MainActivity extends AppCompatActivity {
 
                     remains.add(new Remain(imageUri,casename,stylename, city+address, intro));
                 }
+                Collections.sort(remains,sortData);
                 remainAdapter.notifyDataSetChanged();
 
                 //用Set特性排除相同內容 (取得區域名)

@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.ministryofculture.CostumView.ImageDialog;
 
 import jp.wasabeef.glide.transformations.BlurTransformation;
 
@@ -57,12 +58,12 @@ public class InfoActivity extends AppCompatActivity {
         bundle = getIntent().getExtras();
         String caseName = bundle.getString("casename");
         String address_t = bundle.getString("address");
-        String imageUri = bundle.getString("imageUri");
+        final String imageUri = bundle.getString("imageUri");
         String intro = bundle.getString("intro");
 
         Glide.with(InfoActivity.this)
                 .load(imageUri)
-                .transform(new BlurTransformation(50,6))
+                .transform(new BlurTransformation(50,6))//霧化圖片
                 .into(info_image);
 
         Glide.with(InfoActivity.this)
@@ -72,6 +73,14 @@ public class InfoActivity extends AppCompatActivity {
         casename.setText(caseName);
         address.setText(address_t);
         info.setText(intro);
+
+        info_image2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ImageDialog imageDialog = new ImageDialog(InfoActivity.this, imageUri);
+                imageDialog.show();
+            }
+        });
     }
 
     @Override
@@ -88,8 +97,8 @@ public class InfoActivity extends AppCompatActivity {
         if (hasFocus){
             View decorView = getWindow().getDecorView();
             decorView.setSystemUiVisibility(
-                    View.SYSTEM_UI_FLAG_FULLSCREEN
-                    | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                    //View.SYSTEM_UI_FLAG_FULLSCREEN
+                     View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                     | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
             );
         }
